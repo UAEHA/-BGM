@@ -1,87 +1,55 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>Notion BGM</title>
-  <style>
-    body {
-      margin: 0;
-      background: #fdfdfd;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: sans-serif;
-    }
-
-    #bgm {
-      display: none;
-    }
-
-    #playBtn {
-      background: white;
-      border: none;
-      border-radius: 50%;
-      width: 64px;
-      height: 64px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    #playBtn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    }
-
-    #playBtn svg {
-      width: 32px;
-      height: 32px;
-      fill: #444;
-    }
-
-    #playBtn.hidden {
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>심플 BGM</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+    background: #fff;
+    font-family: sans-serif;
+  }
+  #volumeControl {
+    width: 150px;
+  }
+</style>
 </head>
 <body>
 
 <audio id="bgm" autoplay loop>
-  <source src="https://uaeha.github.io/-BGM/Only%20Dance%21%20BGM.mp3" type="audio/mpeg">
+  <source src="https://uaeha.github.io/-BGM/Only%20Dance%21%20BGM.mp3" type="audio/mpeg" />
+  브라우저가 오디오 태그를 지원하지 않습니다.
 </audio>
 
-<button id="playBtn" aria-label="음악 재생">
-  <svg viewBox="0 0 24 24">
-    <path d="M8 5v14l11-7z"/>
-  </svg>
-</button>
+<input
+  id="volumeControl"
+  type="range"
+  min="0"
+  max="1"
+  step="0.01"
+  value="0.3"
+  aria-label="볼륨 조절"
+/>
 
 <script>
-  const audio = document.getElementById('bgm');
-  const playBtn = document.getElementById('playBtn');
+  const bgm = document.getElementById('bgm');
+  const volumeControl = document.getElementById('volumeControl');
 
-  // 브라우저가 자동재생 막는 경우 대비해서, 버튼도 제공
-  window.addEventListener('load', () => {
-    audio.volume = 0.3; // 🔉 시작 볼륨 30%
+  // 초기 볼륨 설정
+  bgm.volume = volumeControl.value;
 
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        // 자동재생 실패 시 수동 재생 버튼 사용
-        playBtn.classList.remove('hidden');
-      });
-    } else {
-      playBtn.classList.remove('hidden');
-    }
+  // 볼륨 슬라이더 변경 시 오디오 볼륨 변경
+  volumeControl.addEventListener('input', () => {
+    bgm.volume = volumeControl.value;
   });
 
-  playBtn.addEventListener('click', () => {
-    audio.play();
-    playBtn.classList.add('hidden');
+  // 자동재생 시도 (실패하면 무시)
+  window.addEventListener('load', () => {
+    bgm.play().catch(() => {
+      // 자동재생 차단되면 볼륨 조절 슬라이더라도 노출해줌
+    });
   });
 </script>
 
