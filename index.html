@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Notion BGM</title>
+  <style>
+    body {
+      margin: 0;
+      background: #fdfdfd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    #bgm {
+      display: none;
+    }
+
+    #playBtn {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #playBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    #playBtn svg {
+      width: 32px;
+      height: 32px;
+      fill: #444;
+    }
+
+    #playBtn.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bgm" autoplay loop>
+  <source src="https://uaeha.github.io/-BGM/only%20dance%21%20BGM.mp3" type="audio/mpeg">
+</audio>
+
+<button id="playBtn" aria-label="음악 재생">
+  <svg viewBox="0 0 24 24">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+</button>
+
+<script>
+  const audio = document.getElementById('bgm');
+  const playBtn = document.getElementById('playBtn');
+
+  // 브라우저가 자동재생 막는 경우 대비해서, 버튼도 제공
+  window.addEventListener('load', () => {
+    audio.volume = 0.3; // 🔉 시작 볼륨 30%
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // 자동재생 실패 시 수동 재생 버튼 사용
+        playBtn.classList.remove('hidden');
+      });
+    } else {
+      playBtn.classList.remove('hidden');
+    }
+  });
+
+  playBtn.addEventListener('click', () => {
+    audio.play();
+    playBtn.classList.add('hidden');
+  });
+</script>
+
+</body>
+</html>
